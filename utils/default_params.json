@@ -1,0 +1,6 @@
+{
+	"path":"data/english_french_base_file.csv",
+	"delimiter":"\t",
+	"language":"en_US",
+	"save":true
+}
