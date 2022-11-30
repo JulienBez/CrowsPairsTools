@@ -2,6 +2,8 @@ import pandas as pd
 import string
 import json
 
+### File Management ###
+
 def openFile(path):
 	"open txt file line by line"
 	with open(path,'r',encoding='utf-8') as f:
@@ -18,6 +20,13 @@ def openCSV(path,delimiter):
 	"open csv file with pandas according to specified delimiter"
 	return pd.read_csv(path,delimiter=delimiter)
 
+def saveCSV(path,delimiter,data,header):
+	"save in CSV a list of list, given a header and some parameters"
+	df = pd.DataFrame(data)
+	df.to_csv(path.replace("data/","output/"),sep=delimiter,encoding="utf-8",header=header,index=False)
+
+### Utility ###
+
 def makeEquivalent(string,lang):
 	"remplace les termes pouvant renvoyer de fausses paires non minimales (faux positifs)"
 	equivalents_list = [i.split(",") for i in openFile(f"utils/equivalents/{lang}.txt")]
@@ -25,29 +34,38 @@ def makeEquivalent(string,lang):
 		string = string.replace(f" {equivalents[0]} ",f" {equivalents[1]} ")
 	return string
 
-def saveCSV(path,delimiter,data,header):
-	"save in CSV a list of list, given a header and some parameters"
-	df = pd.DataFrame(data)
-	df.to_csv(path.replace("data/","output/"),sep=delimiter,encoding="utf-8",header=header,index=False)
+def getDifferences(more,less,lang):
+	"count the number of different words between more sentences and less sentences"
+
+	more_NLP = makeEquivalent(f" {more.lower().translate(str.maketrans('', '', string.punctuation))} ",lang).split()
+	less_NLP = makeEquivalent(f" {less.lower().translate(str.maketrans('', '', string.punctuation))} ",lang).split()
+	more_SET = list(set([i for i in more_NLP if i not in less_NLP]))
+	less_SET = list(set([i for i in less_NLP if i not in more_NLP]))
+	
+	# It looks like a duplicate of isMinimal() function, and it is. But if we use makeEquivalent() function we replace
+	# some words we want to keep for analysis.
+	# By adding this function to count the differences, we protect the equivalent words.
+	# This function is far from ideal, but it does the job ! + crowspairs dataset is not that big, there is no real impact
+	# on script runtime here.
+
+	return len(more_SET + less_SET)
 
 def isMinimal(row,lang):
 	"save in list all non minimal pairs analyzed"
 	more = row[f'sent_more_{lang}']
 	less = row[f'sent_less_{lang}']
-	more_NLP = more.lower().translate(str.maketrans('', '', string.punctuation)).split()
-	less_NLP = less.lower().translate(str.maketrans('', '', string.punctuation)).split()
-
-	# à tester : remplacer certains termes pour enlever les faux positifs. Risques : on renvoie pas les bonnes erreurs
-	# sur le corpus en_US : avant ce traitement : 379 paires détectées / après ce traitement : 275 paires détectées
-	#
-	# more_NLP = makeEquivalent(f" {more.lower().translate(str.maketrans('', '', string.punctuation))} ",lang).split()
-	# less_NLP = makeEquivalent(f" {less.lower().translate(str.maketrans('', '', string.punctuation))} ",lang).split()
-
-	more_SET = list(set([i for i in more_NLP if i not in less_NLP]))
-	less_SET = list(set([i for i in less_NLP if i not in more_NLP]))
-	differences = len(more_SET + less_SET)
-	changes = [row['id']," | ".join(more_SET)," | ".join(less_SET)]
+	differences = getDifferences(more,less,lang) #if we want to eliminate equivalent words
+	#differences = len(more_SET + less_SET) #if we want to keep equivalent words | comment the two following lines and reduce indent by one for the rest
+	changes = []
+	if differences > 0:
+		more_NLP = more.lower().translate(str.maketrans('', '', string.punctuation)).split()
+		less_NLP = less.lower().translate(str.maketrans('', '', string.punctuation)).split()
+		more_SET = list(set([i for i in more_NLP if i not in less_NLP]))
+		less_SET = list(set([i for i in less_NLP if i not in more_NLP]))
+		changes = [row['id']," | ".join(more_SET)," | ".join(less_SET)]
 	return differences,changes
+
+### Tasks ###
 
 def checkCorpus(path,delimiter,lang,save):
 	"check all pairs of a given data and return non minimal pairs in csv file (with another csv to see non aligned words)"
@@ -78,6 +96,8 @@ def checkCorpus(path,delimiter,lang,save):
 		saveCSV(path.replace(".csv","_nonMinimal.csv"),delimiter,nonMinimal,["id"] + [i for i in list(data.columns.values) if lang in i])
 		saveCSV(path.replace(".csv","_changes.csv"),delimiter,changes_list,["id",f"sent_more_{lang}_changes",f"sent_less_{lang}_changes"])
 		print("done !")
+
+### Script ###
 
 def proceed(args):
 
