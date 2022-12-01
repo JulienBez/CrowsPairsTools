@@ -1,0 +1,7 @@
+une,un
+la,le
+elle,il
+elles,ils
+ma,mon
+sa,son
+lui,il

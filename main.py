@@ -52,8 +52,8 @@ def getDifferences(more,less,lang):
 
 def isMinimal(row,lang):
 	"save in list all non minimal pairs analyzed"
-	more = row[f'sent_more_{lang}']
-	less = row[f'sent_less_{lang}']
+	more = str(row[f'sent_more_{lang}'])
+	less = str(row[f'sent_less_{lang}'])
 	differences = getDifferences(more,less,lang) #if we want to eliminate equivalent words
 	#differences = len(more_SET + less_SET) #if we want to keep equivalent words | comment the two following lines and reduce indent by one for the rest
 	changes = []
@@ -93,8 +93,8 @@ def checkCorpus(path,delimiter,lang,save):
 	print(f"{len(nonMinimal)} non minimal pairs in total")
 	if save:
 		print("saving...")
-		saveCSV(path.replace(".csv","_nonMinimal.csv"),delimiter,nonMinimal,["id"] + [i for i in list(data.columns.values) if lang in i])
-		saveCSV(path.replace(".csv","_changes.csv"),delimiter,changes_list,["id",f"sent_more_{lang}_changes",f"sent_less_{lang}_changes"])
+		saveCSV(path.replace(".csv",f"_{lang}_nonMinimal.csv"),delimiter,nonMinimal,["id"] + [i for i in list(data.columns.values) if lang in i])
+		saveCSV(path.replace(".csv",f"_{lang}_changes.csv"),delimiter,changes_list,["id",f"sent_more_{lang}_changes",f"sent_less_{lang}_changes"])
 		print("done !")
 
 ### Script ###
