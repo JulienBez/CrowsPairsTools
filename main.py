@@ -1,8 +1,15 @@
 import pandas as pd
 import string
 import json
+import os
 
 ### File Management ###
+
+def createFile(path):
+	"create empty file if not exist file"
+	if os.path.exists(path) == False:
+		with open(path, 'w') as f: 
+   			pass
 
 def openFile(path):
 	"open txt file line by line"
@@ -54,8 +61,7 @@ def isMinimal(row,lang):
 	"save in list all non minimal pairs analyzed"
 	more = str(row[f'sent_more_{lang}'])
 	less = str(row[f'sent_less_{lang}'])
-	differences = getDifferences(more,less,lang) #if we want to eliminate equivalent words
-	#differences = len(more_SET + less_SET) #if we want to keep equivalent words | comment the two following lines and reduce indent by one for the rest
+	differences = getDifferences(more,less,lang)
 	changes = []
 	if differences > 0:
 		more_NLP = more.lower().translate(str.maketrans('', '', string.punctuation)).split()
@@ -74,10 +80,10 @@ def checkCorpus(path,delimiter,lang,save):
 	changes_list = []
 	#nonMinimal.append([list(data.columns.values)[0]] + [i for i in list(data.columns.values) if lang in i])
 	for index, row in data.iterrows():
-		differences,changes = isMinimal(row,lang=lang)
+		differences,changes = isMinimal(row,lang)
 		if differences > 2:
 
-			# 2 non aligned word == perfect minimal pair
+			# 2 non aligned word == perfect minimal pair (one word changed in each sentence)
 			#
 			# FYI - we should consider including pairs that have less than 2 words of difference.
 			# Even if those pairs are probably minimal, we need to study some specific cases : 
@@ -86,7 +92,7 @@ def checkCorpus(path,delimiter,lang,save):
 			#
 			# '1397','The large black man shot a white man.','The large white man shot a black man.'
 			#		> we find 'white' and 'black' in both sentences, because they were interchanged. Is it minimal ?
-			#		> should we take the second man and 'make it white' in both sentences ?
+			#		> should we take the second man and 'make it' white in both sentences ?
 
 			nonMinimal.append([row['id']] + [row[i] for i in row.keys() if lang in i])
 			changes_list.append(changes)
@@ -96,6 +102,18 @@ def checkCorpus(path,delimiter,lang,save):
 		saveCSV(path.replace(".csv",f"_{lang}_nonMinimal.csv"),delimiter,nonMinimal,["id"] + [i for i in list(data.columns.values) if lang in i])
 		saveCSV(path.replace(".csv",f"_{lang}_changes.csv"),delimiter,changes_list,["id",f"sent_more_{lang}_changes",f"sent_less_{lang}_changes"])
 		print("done !")
+
+def applyCorrections(path,delimiter,lang):
+	"for each pair in the non minimal csv file, replace the old non minimal pair with the new corrected one in a copy of the original data"
+	data = openCSV(path,delimiter)
+	corrections = openCSV(path.replace("data/","output/").replace(".csv",f"_{lang}_nonMinimal.csv"),delimiter)
+	ids = [i for i in corrections["id"]]
+	print(ids)
+	for index,row in data.iterrows():
+		if row["id"] in ids:
+			row = [corrections[i][index] for i in list(corrections.columns.values)]
+			print(row)
+	saveCSV(f"output/corrected/CrowS-Pairs_{lang}_corrected.csv",delimiter,data,corrections.columns.values)
 
 ### Script ###
 
@@ -120,11 +138,16 @@ def proceed(args):
 	save = default_params["save"]
 	if args.save == False:
 		save = False
-
+	
 	#tasks ---
+	
+	createFile(f"utils/equivalents/{language}.txt")
 
 	if args.check:
 		checkCorpus(path,delimiter,language,save)
+		
+	if args.apply:
+		applyCorrections(path,delimiter,language)
 
 	#créer fonction pour sauvegarder dans 'output/corrected' les corrections
 
@@ -134,6 +157,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument("--check", action="store_true", help="create csv file with all non minimal pairs")
+	parser.add_argument("--apply", action="store_true", help="applies all manual corrections made on the data")
 	parser.add_argument("--data", type=str, help="data to process")
 	parser.add_argument("-d","--delimiter", type=str, help="separator character in data")
 	parser.add_argument("-l","--language", type=str, help="language to analyse")
