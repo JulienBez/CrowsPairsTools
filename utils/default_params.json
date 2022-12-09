@@ -1,6 +1,5 @@
 {
-	"path":"data/english_french_base_file.csv",
+	"path":"data/CrowsPairs_exemple.csv",
 	"delimiter":"\t",
-	"language":"en_US",
-	"save":true
+	"language":"en_US"
 }
