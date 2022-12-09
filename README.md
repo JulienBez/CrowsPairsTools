@@ -50,7 +50,16 @@ python main.py --apply --data CrowsPairs_exemple.csv -l fr_FR
 
 It will create a new file (**CrowsPairs_fr_FR_corrected.csv**) in the **output/corrected/** folder, containing your corpus with every corrections.
 
-##Equivalent words
+## Available parameters
+Here are all the parameters you can use with this script :
+
+- **--check** : main task. Retrieve non minimal pairs from your dataset.
+- **--apply** : main task. Save your corrections and create a well formed CrowS-Pairs-like dataset.
+- **--data** : path to your CrowS-Pairs-like dataset. **Mandatory**.
+- **-d** or **--delimiter** : separator character in your csv file. '\t' (tab) by default.
+- **-l** or **--language** : language to base your analysis on. **Mandatory**.
+
+## Equivalent words
 A lot of pairs will be indicated as non minimal by the script whereas they are in fact minimal. This is because, depending on the language you are using, some words are affected by gender. In order to bypass those false non minimal pairs, you can go to **utils/equivalents/** and find a txt file with your language's tag (**fr_FR.txt**). In this file, you can create rules to indicate words that are more or less 'equivalents'. For instance, **'il'** and **'elle'** only differ because of gender in french. By writting a line with **'elle,il'** in **fr_FR.txt**, you indicate that every **'elle'** encountered is equivalent to **'il'**. Those equivalent rules are only applied while analyzing your dataset and DOES NOT MODIFY your dataset in any way. 
 
 The goal with those sets of rule was to reduce the number of non minimal pairs found by the script, in order to make the correction processus shorter and easier. I could have used a lemmatizer instead of this, but it seemed to be a bit too much, considering that the pairs are already almost all minimal.
