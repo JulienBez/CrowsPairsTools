@@ -27,7 +27,7 @@ python main.py --apply
 It will run the script on the example dataset, based on english (US) pairs.
 
 # How to use
-This tool was made to be as simple as possible when comes the moment to use it. You only need to have a CrowS-Pairs-like corpus and to specify your language's **IETF BCP 47** tag (you can find it [here]( https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a). For instance : 
+This tool was made to be as simple as possible when comes the moment to use it. You only need to have a CrowS-Pairs-like corpus and to specify your language's **IETF BCP 47** tag (you can find it [here](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a)). For instance : 
 
 - **CrowsPairs_exemple.csv** - a CrowS-Pairs-like dataset with english (US) and french pairs.
 - **fr_FR** - this is the french language's **IETF BCP 47** tag.
