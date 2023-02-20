@@ -141,7 +141,7 @@ def proceed(args):
 
 	delimiter = default_params["delimiter"]
 	if args.delimiter:
-		sep = args.delimiter
+		delimiter = args.delimiter
 
 	language = default_params["language"]
 	if args.language:
