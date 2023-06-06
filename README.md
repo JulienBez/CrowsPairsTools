@@ -1,11 +1,11 @@
 # CrowsPairsTools
-This tool was made to help you create a well formed adaptation of the CrowS-Pairs dataset in your own language. It reviews every pair written in your language and points out the ones that are not minimal. As a reminder : a minimal pair is composed of two sentences with as few changing words as possible from one to the other. For more informations about the dataset, please refer to [the original work](https://github.com/nyu-mll/crows-pairs).
 
-# Disclaimer
 This work is the prolongation of the work I realised for my fist year master memoire. It is based on the CrowS-Pairs dataset. Here are some links : 
 
 - https://github.com/nyu-mll/crows-pairs (original CrowS-Pairs)
 - https://gitlab.inria.fr/french-crows-pairs/acl-2022-paper-data-and-code (french CrowS-Pairs) 
+
+This tool was made to help you create a well formed adaptation of the CrowS-Pairs dataset in your own language. It reviews every pair written in your language and points out the ones that are not minimal. As a reminder : a minimal pair is composed of two sentences with as few changing words as possible from one to the other. For more informations about the dataset, please refer to [the original work](https://github.com/nyu-mll/crows-pairs).
 
 # Installation
 To install CrowsPairsTools, you must have **Python 3.x** and **pip** installed. Clone this repository on your computer. Open your terminal and navigate to CrowsPairsTools's folder (where **main.py** is located). Once here, run the following command : 
