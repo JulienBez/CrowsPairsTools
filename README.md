@@ -7,7 +7,7 @@ This work is the prolongation of the work I realised for my fist year master mem
 
 This tool was made to help you create a well formed adaptation of the CrowS-Pairs dataset in your own language. It reviews every pair written in your language and points out the ones that are not minimal. As a reminder : a minimal pair is composed of two sentences with as few changing words as possible from one to the other. For more informations about the dataset, please refer to [the original work](https://github.com/nyu-mll/crows-pairs).
 
-# Installation
+## Installation
 To install CrowsPairsTools, you must have **Python 3.x** and **pip** installed. Clone this repository on your computer. Open your terminal and navigate to CrowsPairsTools's folder (where **main.py** is located). Once here, run the following command : 
 
 ```
@@ -26,7 +26,7 @@ python main.py --apply
 
 It will run the script on the example dataset, based on english (US) pairs.
 
-# How to use
+## How to use
 This tool was made to be as simple as possible when comes the moment to use it. You only need to have a CrowS-Pairs-like corpus and to specify your language's **IETF BCP 47** tag (you can find it [here](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a)). For instance : 
 
 - **CrowsPairs_exemple.csv** - a CrowS-Pairs-like dataset with english (US) and french pairs.
