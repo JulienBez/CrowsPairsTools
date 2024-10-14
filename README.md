@@ -1,20 +1,21 @@
 # CrowsPairsTools
 
-This work is the prolongation of the work I realised for my fist year master memoire. It is based on the CrowS-Pairs dataset. Here are some links : 
+This work is the prolongation of the work I realised for my fist year master memoire. It is based on the CrowS-Pairs dataset. Here are some links: 
 
 - https://github.com/nyu-mll/crows-pairs (original CrowS-Pairs)
 - https://gitlab.inria.fr/french-crows-pairs/acl-2022-paper-data-and-code (french CrowS-Pairs) 
 
-This tool was made to help you create a well formed adaptation of the CrowS-Pairs dataset in your own language. It reviews every pair written in your language and points out the ones that are not minimal. As a reminder : a minimal pair is composed of two sentences with as few changing words as possible from one to the other. For more informations about the dataset, please refer to [the original work](https://github.com/nyu-mll/crows-pairs).
+This tool was made to help you create a well formed adaptation of the CrowS-Pairs dataset in your own language. It reviews every pair written in your language and points out the ones that are not minimal. As a reminder: a minimal pair is composed of two sentences with as few changing words as possible from one to the other. For more informations about the dataset, please refer to [the original work](https://github.com/nyu-mll/crows-pairs).
 
 ## Installation
-To install CrowsPairsTools, you must have **Python 3.x** and **pip** installed. Clone this repository on your computer. Open your terminal and navigate to CrowsPairsTools's folder (where **main.py** is located). Once here, run the following command : 
+
+To install CrowsPairsTools, you must have **Python 3.x** and **pip** installed. Clone this repository on your computer. Open your terminal and navigate to CrowsPairsTools's folder (where **main.py** is located). Once here, run the following command: 
 
 ```
 pip install pandas
 ```
 
-This is currently the only package required in order to make CrowsPairsTools work. To check if everything works as intended, you can simply run the following commands : 
+This is currently the only package required in order to make CrowsPairsTools work. To check if everything works as intended, you can simply run the following commands: 
 
 ```
 python main.py --check
@@ -27,12 +28,13 @@ python main.py --apply
 It will run the script on the example dataset, based on english (US) pairs.
 
 ## How to use
-This tool was made to be as simple as possible when comes the moment to use it. You only need to have a CrowS-Pairs-like corpus and to specify your language's **IETF BCP 47** tag (you can find it [here](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a)). For instance : 
+
+This tool was made to be as simple as possible when comes the moment to use it. You only need to have a CrowS-Pairs-like corpus and to specify your language's **IETF BCP 47** tag (you can find it [here](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a)). For instance: 
 
 - **CrowsPairs_exemple.csv** - a CrowS-Pairs-like dataset with english (US) and french pairs.
 - **fr_FR** - this is the french language's **IETF BCP 47** tag.
 
-You have to put your **CrowsPairs_exemple.csv** in the **data** folder. Then, from the **CrowsPairsTools** folder, run this command :
+You have to put your **CrowsPairs_exemple.csv** in the **data** folder. Then, from the **CrowsPairsTools** folder, run this command:
 
 ```
 python main.py --check --data CrowsPairs_exemple.csv -l fr_FR
@@ -40,9 +42,9 @@ python main.py --check --data CrowsPairs_exemple.csv -l fr_FR
 
 This command will check all the columns of your corpus with **fr_FR** in their name. You MUST at least have a **'sent_more_fr_FR'** and a **'sent_less_fr_FR'** column in order for the script to work. Do not forget to put **'id'** as the fist column header too. This command will generate a **fr_FR** folder in the **output** folder. 
 
-This **fr_FR** folder contains two csv files : one containing every non minimal pairs the script found (**CrowsPairs_exemple_nonMinimal.csv**) and the other containing for each pair the problematic terms/words that differ from one sentence to the other (**CrowsPairs_exemple_changes.csv**).
+This **fr_FR** folder contains two csv files: one containing every non minimal pairs the script found (**CrowsPairs_exemple_nonMinimal.csv**) and the other containing for each pair the problematic terms/words that differ from one sentence to the other (**CrowsPairs_exemple_changes.csv**).
 
-At this point, you might want to manually correct each problematic pair in **CrowsPairs_exemple_nonMinimal.csv**. Once this is done, you can run the following command :
+At this point, you might want to manually correct each problematic pair in **CrowsPairs_exemple_nonMinimal.csv**. Once this is done, you can run the following command:
 
 ```
 python main.py --apply --data CrowsPairs_exemple.csv -l fr_FR
@@ -51,7 +53,7 @@ python main.py --apply --data CrowsPairs_exemple.csv -l fr_FR
 It will create a new file (**CrowsPairs_fr_FR_corrected.csv**) in the **output/corrected/** folder, containing your corpus with every corrections.
 
 ### Available parameters
-Here are all the parameters you can use with this script :
+Here are all the parameters you can use with this script:
 
 - **--check** : main task. Retrieve non minimal pairs from your dataset.
 - **--apply** : main task. Save your corrections and create a well formed CrowS-Pairs-like dataset.
